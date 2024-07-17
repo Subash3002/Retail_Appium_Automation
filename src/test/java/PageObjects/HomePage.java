@@ -3,12 +3,6 @@ package PageObjects;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.interactions.PointerInput;
-import org.openqa.selenium.interactions.Sequence;
-
-import java.time.Duration;
-import java.util.List;
 
 import static PageObjects.OtherMethods.scrollUpTo;
 
@@ -38,6 +32,19 @@ public class HomePage {
     public String productListed="new UiSelector().resourceId(\"blibli.mobile.commerce:id/cl_parent\").instance(1)";
     public String activityTitle="blibli.mobile.commerce:id/tv_title";
     public String filterCount="blibli.mobile.commerce:id/tv_option_selected_count";
+    public String productSelectedName="new UiSelector().resourceId(\"blibli.mobile.commerce:id/tv_product_name\").instance(0)";
+    public String productSelectedPrice="new UiSelector().resourceId(\"blibli.mobile.commerce:id/tv_final_price\").instance(0)";
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public String getProductPrice() {
+        return productPrice;
+    }
+
+    public String productName;
+    public String productPrice;
 
     public boolean isLoginButtonVisible(){
         return driver.findElement(AppiumBy.androidUIAutomator(loginButton)).isDisplayed();
@@ -60,7 +67,6 @@ public class HomePage {
     public void applyColorFilter(){
         scrollUpTo(driver);
         driver.findElement(AppiumBy.androidUIAutomator(colorFilter)).click();
-
 
     }
 
@@ -92,6 +98,8 @@ public class HomePage {
 
     public void selectExpensiveProduct(){
         driver.findElement(AppiumBy.androidUIAutomator(sortExpensive)).click();
+        productName=driver.findElement(AppiumBy.androidUIAutomator(productSelectedName)).getText();
+        productPrice=driver.findElement(AppiumBy.androidUIAutomator(productSelectedPrice)).getText();
         driver.findElement(AppiumBy.androidUIAutomator(expensiveProduct)).click();
     }
 

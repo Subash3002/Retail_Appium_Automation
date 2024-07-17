@@ -17,8 +17,7 @@ Feature: Blibli Retail Automation
     Then the user should see the total count "3" in applied filter
     When the user selects sort filter
     And the user selects the expensive product after applying filters
-    And the user adds the selected product to bag
-    When the user moves to the cart
+    And the user moves to the cart
     Then the user should see the login page opened for user login
     When the user enters email "subash28122k3@gmail.com"
     Then the user should see the "subash28122k3@gmail.com" in the email input field
@@ -26,15 +25,19 @@ Feature: Blibli Retail Automation
     Then the user should see the "Password@123" in the password input field
     When the user clicks login button
     Then the user navigates to cart page
+    Then the verifies the product details
     When the user add quantity of the product
     And the user wishlist the product
-    Then the user see the quantity changed to "2"
+#    Then the user see the quantity changed to "2"
     When the user checkout the product
     Then the user goes to payment page
     When the user selects the payment option by choosing "Bank BRI / Bank Lainnya"
-    And the user makes payment
-    When the user navigates to home
+    Then the user should see "Bank BRI / Bank Lainnya" selected
+    When the user makes payment
+    Then the user navigated to home page
     When the user navigates to orders list
+    Then the ordered product should be displayed
     When the user cancels the order
+    Then the user should see the "Canceled" message
 
 

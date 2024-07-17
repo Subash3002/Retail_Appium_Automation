@@ -1,5 +1,6 @@
 package PageObjects;
 
+import io.appium.java_client.AppiumBy;
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -12,6 +13,8 @@ public class CartPage {
     public String wishListButton="blibli.mobile.commerce:id/iv_wish_list";
     public String checkoutButton="blibli.mobile.commerce:id/bt_checkout";
     public String quantityText="//android.widget.EditText[@resource-id=\"blibli.mobile.commerce:id/et_qty\"]";
+    public String productName="new UiSelector().resourceId(\"blibli.mobile.commerce:id/tv_product_name\").instance(0)";
+    public String productPrice="new UiSelector().resourceId(\"blibli.mobile.commerce:id/tv_price\").instance(0)";
 
     public AppiumDriver driver;
 
@@ -38,5 +41,13 @@ public class CartPage {
 
     public String getProductQuantity() {
         return driver.findElement(By.xpath(quantityText)).getText();
+    }
+
+    public String getProductName(){
+        return driver.findElement(AppiumBy.androidUIAutomator(productName)).getText();
+    }
+
+    public String getProductPrice(){
+        return driver.findElement(AppiumBy.androidUIAutomator(productPrice)).getText();
     }
 }

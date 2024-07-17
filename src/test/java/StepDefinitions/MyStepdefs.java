@@ -38,7 +38,7 @@ public class MyStepdefs {
     @When("the user launches the blibli application")
     public void theUserLaunchesTheBlibliApplication() throws MalformedURLException {
         driver=new AndroidDriver(new URL("http://127.0.0.1:4722/wd/hub"),capabilities);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         homePage=new HomePage(driver);
         cartPage=new CartPage(driver);
         loginPage=new LoginPage(driver);
@@ -67,12 +67,12 @@ public class MyStepdefs {
     }
 
     @When("the user chooses color filter")
-    public void theUserChoosesColorFilter() {
+    public void theUserChoosesColorFilter() throws InterruptedException {
         homePage.applyColorFilter();
     }
 
     @When("the user chooses product stock filter")
-    public void theUserChoosesProductStockFilter() {
+    public void theUserChoosesProductStockFilter() throws InterruptedException {
         homePage.applyProductStockFilter();
     }
 
@@ -106,15 +106,9 @@ public class MyStepdefs {
         homePage.selectExpensiveProduct();
     }
 
-    @When("the user adds the selected product to bag")
-    public void theUserAddsTheSelectedProductToBag() {
-        homePage.addToCart();
-    }
-
     @When("the user moves to the cart")
     public void theUserMovesToTheCart() {
         homePage.moveToCart();
-
     }
 
     @When("the user enters email {string}")
@@ -149,18 +143,14 @@ public class MyStepdefs {
 
 
     @When("the user makes payment")
-    public void theUserMakesPayment() {
+    public void theUserMakesPayment() throws InterruptedException {
         checkOut.doPayment();
+        orderDetailsPage.navigateHome();
     }
 
     @When("the user cancels the order")
-    public void theUserCancelsTheOrder() {
+    public void theUserCancelsTheOrder() throws InterruptedException {
         orderDetailsPage.cancelOrder();
-    }
-
-    @When("the user navigates to home")
-    public void theUserNavigatesToHomeAfterCancelingTheOrder() throws InterruptedException {
-        orderDetailsPage.navigateHome();
     }
 
     @When("the user navigates to orders list")
@@ -172,7 +162,6 @@ public class MyStepdefs {
     public void theUserShouldSeeTheDisplayedInSearchbar(String productName) {
         Assert.assertTrue(homePage.validateProductName(productName),"The product is not searched");
     }
-
 
     @Then("the user sees the listed products")
     public void theUserSeesTheListedProducts() {
@@ -204,7 +193,6 @@ public class MyStepdefs {
         Assert.assertTrue(loginPage.validatePassword(password),"Password is mismatched");
     }
 
-
     @Then("the user navigates to cart page")
     public void theUserNavigatesToCartPage() {
         Assert.assertTrue(cartPage.isUserInCart(),"User is not in cart");
@@ -226,8 +214,34 @@ public class MyStepdefs {
         Assert.assertTrue(checkOut.isUserNavigatedToPayment(),"The user is not in payment page");
     }
 
-    @Then("the user sees the payment informations")
-    public void theUserSeesThePaymentInformations() {
+    @Then("the user navigated to home page")
+    public void theUserNavigatedToHomePage() {
+        Assert.assertTrue(orderDetailsPage.isNavigatedToHome(),"The user not in home page");
+    }
 
+    @Then("the ordered product should be displayed")
+    public void theOrderedProductShouldBeDisplayed() {
+        Assert.assertTrue(orderDetailsPage.isOrderedProductVisible(),"The ordered product not visible");
+    }
+
+    @Then("the user should see {string} selected")
+    public void theUserShouldSeeSelected(String bankName) {
+        Assert.assertEquals(bankName,checkOut.getChoosenBank().trim(),"Bank not updated");
+    }
+
+    @Then("the user should see the payment status as {string}")
+    public void theUserShouldSeeThePaymentStatusAs(String cancelStatus) {
+        Assert.assertEquals(cancelStatus,orderDetailsPage.getPaymentStatus(),"Order not cancelled");
+    }
+
+    @Then("the verifies the product details")
+    public void theVerifiesTheProductDetails() {
+        Assert.assertEquals(cartPage.getProductName(),homePage.getProductName(),"Product name mismatch");
+        Assert.assertEquals(cartPage.getProductPrice(),homePage.getProductPrice(),"Product price mismatch");
+    }
+
+    @Then("the user should see the {string} message")
+    public void theUserShouldSeeTheMessage(String cancelMessage) {
+        Assert.assertEquals(cancelMessage,orderDetailsPage.getCancelStatus(),"Order cancelled message not displayed");
     }
 }
